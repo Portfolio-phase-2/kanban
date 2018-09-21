@@ -1,5 +1,7 @@
 # kanban
 
+https://kanban-sr.firebaseapp.com/
+
 ## Project setup
 ```
 npm install
