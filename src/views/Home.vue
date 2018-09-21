@@ -1,8 +1,7 @@
 <template>
   <div class="container">
+    <div v-html="message"></div>
     <div class="row">
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" style="right: 5%; bottom:50%; position:absolute" data-toggle="modal" data-target="#addModal"> + </button>
       <!-- Modal -->
       <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -15,11 +14,11 @@
             </div>
             <div class="modal-body">
               <input type="text" v-model="title" placeholder="Title Planning" autofocus class="form-control mb-3">
-              <input type="text" v-model="description" placeholder="Description" class="form-control">
+              <textarea v-model="description" placeholder="Description" class="form-control"></textarea>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" @click="addPlanning">Save</button>
+              <button type="button" class="btn btn-primary" @click="addPlanning" data-dismiss="modal">Save</button>
             </div>
           </div>
         </div>
@@ -29,10 +28,10 @@
     <div class="row">
 
       <div class="col-md-3 mb-3">
-        <h3 class="text-center bg-primary">Planning</h3>
+        <h3 class="text-center text-white bg-primary">Planning</h3>
         <draggable element="span" v-model="planning" :options="dragOptions">
           <transition-group name="no" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="(element, i) in planning" :key="element.title">
+            <li class="list-group-item list-group-item-primary text-dark" v-for="(element, i) in planning" :key="element.title">
               <p> <strong>{{element.title}}</strong> </p>
               {{element.description}}
               <br>
@@ -43,10 +42,10 @@
       </div>
 
       <div class="col-md-3 mb-3">
-        <h3 class="text-center bg-secondary">Todo</h3>
+        <h3 class="text-center text-white bg-secondary">Todo</h3>
         <draggable element="span" v-model="todo" :options="dragOptions">
           <transition-group name="no" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="(element, i) in todo" :key="element.title">
+            <li class="list-group-item list-group-item-dark text-dark" v-for="(element, i) in todo" :key="element.title">
               <p> <strong>{{element.title}}</strong> </p>
               {{element.description}}
               <br>
@@ -57,10 +56,10 @@
       </div>
 
       <div class="col-md-3 mb-3">
-        <h3 class="text-center bg-warning">Doing</h3>
+        <h3 class="text-center text-white bg-warning">Doing</h3>
         <draggable element="span" v-model="doing" :options="dragOptions">
           <transition-group name="no" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="(element, i) in doing" :key="element.title">
+            <li class="list-group-item list-group-item-warning text-dark" v-for="(element, i) in doing" :key="element.title">
               <p> <strong>{{element.title}}</strong> </p>
               {{element.description}}
               <br>
@@ -71,10 +70,10 @@
       </div>
 
       <div class="col-md-3 mb-3">
-        <h3 class="text-center bg-success">Done</h3>
+        <h3 class="text-center text-white bg-success">Done</h3>
         <draggable element="span" v-model="done" :options="dragOptions">
           <transition-group name="no" class="list-group" tag="ul">
-            <li class="list-group-item" v-for="element in done" :key="element.title">
+            <li class="list-group-item list-group-item-success text-dark" v-for="element in done" :key="element.title">
               <p> <strong>{{element.title}}</strong> </p>
               {{element.description}}
             </li>
@@ -101,17 +100,40 @@ export default {
     addPlanning () {
       let obj = { title: this.title, description: this.description }
       this.planning.push(obj)
+      this.title = ''
+      this.description = ''
+      this.message = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Yeii!</strong> You success for add planing.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>`
     },
     deletePlanning (i) {
-      alert(JSON.stringify(this.planning[i].title))
+      this.message = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success </strong> for delete ${this.planning[i].title}.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>`
       this.planning.splice(i, 1)
     },
     deleteTodo (i) {
-      alert(JSON.stringify(this.todo[i].title))
+      this.message = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success </strong> for delete ${this.todo[i].title}.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>`
       this.todo.splice(i, 1)
     },
     deleteDoing (i) {
-      alert(JSON.stringify(this.doing[i].title))
+      this.message = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success </strong> for delete ${this.doing[i].title}.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>`
       this.doing.splice(i, 1)
     },
     reWrite () {
@@ -158,6 +180,7 @@ export default {
   },
   data () {
     return {
+      message: '',
       title: '',
       description: '',
       planning: [],
@@ -196,7 +219,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .flip-list-move {
   transition: transform 0.5s;
 }
